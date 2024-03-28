@@ -8,9 +8,15 @@ import CartIcon from "../Shared/CartIcon";
 import CartNavigator from "./CartNavigator";
 import UserNavigator from "./UserNavigator";
 import AdminNavigator from "./AdminNavigator";
+
+import AuthGlobal from "../Context/Store/AuthGlobal";
+
 const Tab = createBottomTabNavigator();
 
 const Main = () => {
+
+    const context = useContext(AuthGlobal)
+
     return (
         <Tab.Navigator
             initialRouteName="Home"
@@ -52,6 +58,8 @@ const Main = () => {
                 }}
             />
 
+            {context.stateUser.user.isAdmin == true ? (
+
             <Tab.Screen
                 name="Admin"
                 component={AdminNavigator}
@@ -67,6 +75,7 @@ const Main = () => {
                     }
                 }}
             />
+            ): null }
             <Tab.Screen
                 name="User"
                 component={UserNavigator}
