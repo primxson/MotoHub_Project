@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from "react"
-import {
-    View,
-    Text,
-    FlatList,
-    Dimensions,
-    TextInput,
-    StyleSheet
-} from "react-native"
-import EasyButton from "../../Shared/StyledComponents/EasyButton"
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, Dimensions, TextInput, StyleSheet } from "react-native";
+import EasyButton from "../../Shared/StyledComponents/EasyButton";
 import baseURL from "../../assets/common/baseurl";
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-// import { add } from "react-native-reanimated";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
+import CategoryForm from "./CategoryForm"; // Import the CategoryForm component
 
-var { width } = Dimensions.get("window")
+var { width } = Dimensions.get("window");
 
 const Item = (props) => {
+    const navigation = useNavigation(); // Use the useNavigation hook here
+
     return (
         <View style={styles.item}>
             <Text>{props.item.name}</Text>
+            <EasyButton
+                secondary
+                medium
+                onPress={() => props.navigation.navigate("CategoryForm")} // Use navigation here
+            >
+                <Text style={{ color: "white", fontWeight: "bold" }}>Update</Text>
+            </EasyButton>
             <EasyButton
                 danger
                 medium
@@ -27,14 +30,14 @@ const Item = (props) => {
                 <Text style={{ color: "white", fontWeight: "bold" }}>Delete</Text>
             </EasyButton>
         </View>
-    )
-}
+    );
+};
 
 const Categories = () => {
-
     const [categories, setCategories] = useState([]);
-    const [categoryName, setCategoryName] = useState();
-    const [token, setToken] = useState();
+    const [categoryName, setCategoryName] = useState("");
+    const [token, setToken] = useState("");
+    const navigation = useNavigation();
 
     useEffect(() => {
         AsyncStorage.getItem("jwt")
@@ -46,13 +49,13 @@ const Categories = () => {
         axios
             .get(`${baseURL}categories`)
             .then((res) => setCategories(res.data))
-            .catch((error) => alert("Error  load categories"))
+            .catch((error) => alert("Error loading categories"));
 
         return () => {
-            setCategories();
-            setToken();
-        }
-    }, [])
+            setCategories([]);
+            setToken("");
+        };
+    }, []);
 
     const addCategory = () => {
         const category = {
@@ -68,16 +71,16 @@ const Categories = () => {
         axios
             .post(`${baseURL}categories`, category, config)
             .then((res) => setCategories([...categories, res.data]))
-            .catch((error) => alert("Error  load categories"));
+            .catch((error) => alert("Error adding categories"));
 
         setCategoryName("");
-    }
+    };
 
     const deleteCategory = (id) => {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
-            }
+            },
         };
 
         axios
@@ -86,8 +89,8 @@ const Categories = () => {
                 const newCategories = categories.filter((item) => item.id !== id);
                 setCategories(newCategories);
             })
-            .catch((error) => alert("Error delete categories"));
-    }
+            .catch((error) => alert("Error deleting categories"));
+    };
 
     return (
         <View style={{ position: "relative", height: "100%" }}>
@@ -95,11 +98,12 @@ const Categories = () => {
                 <FlatList
                     data={categories}
                     renderItem={({ item, index }) => (
-                        <Item item={item} index={index} delete={deleteCategory} />
+                        <Item item={item} index={index} delete={deleteCategory} navigation={navigation} />
                     )}
                     keyExtractor={(item) => item.id}
                 />
             </View>
+            
             <View style={styles.bottomBar}>
                 <View>
                     <Text>Add Category</Text>
@@ -122,8 +126,8 @@ const Categories = () => {
                 </View>
             </View>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     bottomBar: {
@@ -136,12 +140,12 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         position: "absolute",
         bottom: 0,
-        left: 0
+        left: 0,
     },
     input: {
         height: 40,
         borderColor: "gray",
-        borderWidth: 1
+        borderWidth: 1,
     },
     item: {
         shadowColor: "#000",
@@ -158,8 +162,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        borderRadius: 5
-    }
-})
+        borderRadius: 5,
+    },
+});
 
 export default Categories;
