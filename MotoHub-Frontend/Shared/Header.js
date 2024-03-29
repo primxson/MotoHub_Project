@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
       padding: 1,
       marginTop: 28,
-      backgroundColor: "#152238", // Change "blue" to the color you want
+      backgroundColor: "#152238", // Change "blue" to the color you wan
     }
   })
 

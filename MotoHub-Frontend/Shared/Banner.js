@@ -14,7 +14,7 @@ const Banner = () => {
             "https://i.pinimg.com/564x/64/dc/2e/64dc2e69cac8146cb53404eeb3fad70e.jpg",
             "https://t3.ftcdn.net/jpg/00/22/70/14/240_F_22701482_lQBEffiwS3vjIT8mDptlUNsza0YX9duk.jpg",
         ]);
-//jh
+
         return () => {
             setBannerData([]);
         };
