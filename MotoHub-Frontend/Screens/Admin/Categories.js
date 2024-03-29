@@ -5,12 +5,12 @@ import baseURL from "../../assets/common/baseurl";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
-import CategoryForm from "./CategoryForm"; // Import the CategoryForm component
+import UpdateCategoryForm from "../../Screens/Admin/UpdateCategoryForm";
 
 var { width } = Dimensions.get("window");
 
 const Item = (props) => {
-    const navigation = useNavigation(); // Use the useNavigation hook here
+    const navigation = useNavigation();
 
     return (
         <View style={styles.item}>
@@ -18,7 +18,7 @@ const Item = (props) => {
             <EasyButton
                 secondary
                 medium
-                onPress={() => props.navigation.navigate("CategoryForm")} // Use navigation here
+                onPress={() => navigation.navigate("UpdateCategoryForm", { id: props.item._id, name: props.item.name })} // Navigate to UpdateCategoryForm screen with necessary data
             >
                 <Text style={{ color: "white", fontWeight: "bold" }}>Update</Text>
             </EasyButton>
@@ -98,7 +98,7 @@ const Categories = () => {
                 <FlatList
                     data={categories}
                     renderItem={({ item, index }) => (
-                        <Item item={item} index={index} delete={deleteCategory} navigation={navigation} />
+                        <Item item={item} index={index} delete={deleteCategory} />
                     )}
                     keyExtractor={(item) => item.id}
                 />

@@ -40,7 +40,7 @@ router.put('/:id', async (req, res) => {
         req.params.id,
         {
             name: req.body.name,
-            icon: req.body.icon || category.icon,
+           // icon: req.body.icon || category.icon,
             color: req.body.color,
         },
         { new: true }

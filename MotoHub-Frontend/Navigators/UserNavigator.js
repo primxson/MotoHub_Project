@@ -6,6 +6,7 @@ import Register from "../Screens/User/Register";
 import UserProfile from "../Screens/User/UserProfile";
 import UpdateProfileForm from "../Screens/User/UpdateProfileForm";
 
+
 const Stack = createStackNavigator();
 
 const UserNavigator = (props) => {
