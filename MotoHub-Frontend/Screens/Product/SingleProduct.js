@@ -40,8 +40,10 @@ const SingleProduct = ({ route }) => {
 
                 </View> 
                 <View style={styles.contentContainer}>
+                    <Text style={styles.price}>$ {item.price}</Text>
                     <Heading style={styles.contentHeader} size='xl'>{item.name}</Heading>
                     <Text style={styles.contentText}>{item.brand}</Text>
+                    
                 </View>
                 <View style={styles.availabilityContainer}>
                     <View style={styles.availability}>
@@ -52,6 +54,7 @@ const SingleProduct = ({ route }) => {
                     </View>
                     <Text>{item.description}</Text>
                 </View>
+                
                 <EasyButton
                     primary
                     medium
@@ -102,9 +105,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     price: {
-        fontSize: 24,
-        margin: 20,
-        color: 'red'
+        fontSize: 30,
+        margin: 0,
+        color: 'blue',
+        fontWeight: 'bold'
     },
     availabilityContainer: {
         marginBottom: 20,
@@ -113,7 +117,8 @@ const styles = StyleSheet.create({
     availability: {
         flexDirection: 'row',
         marginBottom: 10,
-    }
+    },
+  
 })
 
 export default SingleProduct

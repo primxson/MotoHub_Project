@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react';
-import { View, Text, ScrollView, Button, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Button, StyleSheet, TextInput } from 'react-native';
 import { Container } from "native-base"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 
@@ -17,6 +17,8 @@ const UserProfile = (props) => {
     const context = useContext(AuthGlobal)
     const [userProfile, setUserProfile] = useState('')
     const [orders, setOrders] = useState([])
+    const [updatedName, setUpdatedName] = useState('');
+    const [updatedEmail, setUpdatedEmail] = useState('');
     const navigation = useNavigation()
 
     useFocusEffect(
@@ -58,17 +60,48 @@ const UserProfile = (props) => {
 
         }, [context.stateUser.isAuthenticated]))
 
+    // const handleUpdateProfile = () => {
+    //     const updatedProfile = { name: updatedName, email: updatedEmail };
+    //     AsyncStorage.getItem("jwt")
+    //         .then((res) => {
+    //             axios
+    //                 .put(`${baseURL}users/${context.stateUser.user.userId}`, updatedProfile, {
+    //                     headers: { Authorization: `Bearer ${res}` },
+    //                 })
+    //                 .then((response) => {
+    //                     console.log("Profile Updated Successfully", response.data);
+    //                     setUserProfile(response.data); // Update userProfile state with the updated data
+    //                 })
+    //                 .catch((error) => console.log(error))
+    //         })
+    //         .catch((error) => console.log(error))
+    // };
+
     return (
         <Container style={styles.container}>
             <ScrollView contentContainerStyle={styles.subContainer}>
-                <Text style={{ fontSize: 30 }}>
+                {/* <TextInput
+                    style={styles.input}
+                    placeholder="Name"
+                    value={updatedName}
+                    onChangeText={text => setUpdatedName(text)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    value={updatedEmail}
+                    onChangeText={text => setUpdatedEmail(text)}
+                />
+                <Button title="Update Profile" onPress={handleUpdateProfile} /> */}
+
+                <Text style={[styles.text, styles.header]}>
                     {userProfile ? userProfile.name : ""}
                 </Text>
                 <View style={{ marginTop: 20 }}>
-                    <Text style={{ margin: 10 }}>
+                    <Text style={[styles.text, styles.subtitle]}>
                         Email: {userProfile ? userProfile.email : ""}
                     </Text>
-                    <Text style={{ margin: 10 }}>
+                    <Text style={[styles.text, styles.subtitle]}>
                         Phone: {userProfile ? userProfile.phone : ""}
                     </Text>
                 </View>
@@ -76,9 +109,13 @@ const UserProfile = (props) => {
                     <Button title={"Sign Out"} onPress={() => [
                         AsyncStorage.removeItem("jwt"),
                         logoutUser(context.dispatch)
+                    ]} /></View>
+                    <View style={{ marginTop: 40 }}>
+                    <Button title={"Update Profile"} onPress={() => [
+                        navigation.navigate("Update Profile"),
                     ]} />
                     <View style={styles.order}>
-                        <Text style={{ fontSize: 20 }}>My Orders</Text>
+                        <Text style={[styles.text, styles.sectionTitle]}>My Orders</Text>
                         <View>
                             {orders ? (
                                 orders.map((order) => {
@@ -86,7 +123,7 @@ const UserProfile = (props) => {
                                 })
                             ) : (
                                 <View style={styles.order}>
-                                    <Text>You have no orders</Text>
+                                    <Text style={[styles.text, styles.noOrders]}>You have no orders</Text>
                                 </View>
                             )}
                         </View>
@@ -101,16 +138,47 @@ const UserProfile = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: "center"
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 40,
+        backgroundColor: "#FFD700",
     },
     subContainer: {
         alignItems: "center",
-        marginTop: 60
+        flexGrow: 1,
     },
     order: {
         marginTop: 20,
         alignItems: "center",
         marginBottom: 60
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 20,
+        width: '80%',
+        paddingHorizontal: 10
+    },
+    text: {
+        textAlign: 'center', // Center the text
+    },
+    header: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    subtitle: {
+        fontSize: 18,
+        marginBottom: 5,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    noOrders: {
+        fontStyle: 'italic',
     }
 })
 
