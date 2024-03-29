@@ -156,7 +156,7 @@ const DrawerNavigator = () => {
           name="Home"
           options={{
             drawerLabel: 'Home',
-            title: 'Welcome to MotoHub Shop',
+            title: 'Welcome to MotoHub Shop!',
           }}
           component={Main}
         />
