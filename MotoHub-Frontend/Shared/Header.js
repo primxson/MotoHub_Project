@@ -8,7 +8,7 @@ const Header = () => {
             <Image
                 source={require("../assets/Logo.jpg")}
                 resizeMode="contain"
-                style={{ height: 60 }}
+                style={{ height: 90 }}
             />
 
         </SafeAreaView>
@@ -18,13 +18,14 @@ const Header = () => {
 
 const styles = StyleSheet.create({
     header: {
-        width: "100%",
-        flexDirection: 'row',
-        alignContent: "center",
-        justifyContent: "center",
-        padding: 20,
-        marginTop: 20,
+      width: "100%",
+      flexDirection: 'row',
+      alignContent: "center",
+      justifyContent: "center",
+      padding: 1,
+      marginTop: 28,
+      backgroundColor: "#152238", // Change "blue" to the color you want
     }
-})
+  })
 
 export default Header
