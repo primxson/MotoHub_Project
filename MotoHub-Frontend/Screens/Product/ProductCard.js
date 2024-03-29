@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         alignItems: 'center',
         elevation: 8,
-        backgroundColor: 'white'
+        backgroundColor: '#203354',
+        
     },
     image: {
         width: width / 2 - 20 - 10,
@@ -84,7 +85,8 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         fontSize: 14,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: "white"
     },
     price: {
         fontSize: 20,

@@ -56,9 +56,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'gold', // Set background color to gold
+    backgroundColor: "#203354",
+    // Set background color to gold
   },
   title: {
+    color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
