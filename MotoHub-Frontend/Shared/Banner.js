@@ -9,9 +9,10 @@ const Banner = () => {
 
     useEffect(() => {
         setBannerData([
-            "https://images.vexels.com/media/users/3/126443/preview2/ff9af1e1edfa2c4a46c43b0c2040ce52-macbook-pro-touch-bar-banner.jpg",
-            "https://pbs.twimg.com/media/D7P_yLdX4AAvJWO.jpg",
-            "https://www.yardproduct.com/blog/wp-content/uploads/2016/01/gardening-banner.jpg",
+            "https://www.safewise.com/app/uploads/2021/10/Motorcycle-safety-2-768x403.png",
+            "https://www.webbikeworld.com/wp-content/uploads/2019/04/baptiste-c-david-122756-unsplash-scaled.jpg",
+            "https://i.pinimg.com/564x/64/dc/2e/64dc2e69cac8146cb53404eeb3fad70e.jpg",
+            "https://t3.ftcdn.net/jpg/00/22/70/14/240_F_22701482_lQBEffiwS3vjIT8mDptlUNsza0YX9duk.jpg",
         ]);
 
         return () => {
