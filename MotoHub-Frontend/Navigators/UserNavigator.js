@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Login from "../Screens/User/Login";
 import Register from "../Screens/User/Register";
 import UserProfile from "../Screens/User/UserProfile";
+import UpdateProfileForm from "../Screens/User/UpdateProfileForm";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,14 @@ const UserNavigator = (props) => {
             <Stack.Screen
                 name="User Profile"
                 component={UserProfile}
+                options={{
+                    headerShown: false
+                }}
+            />
+
+            <Stack.Screen
+                name="Update Profile"
+                component={UpdateProfileForm}
                 options={{
                     headerShown: false
                 }}
