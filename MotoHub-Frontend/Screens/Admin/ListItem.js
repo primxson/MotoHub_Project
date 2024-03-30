@@ -63,7 +63,7 @@ const ListItem = ({ item, index, deleteProduct }) => {
                             ]}
                             title="Edit"
                         >
-                            <Text style={styles.textStyle}>Edit</Text>
+                            <Text style={styles.textStyle}>Update</Text>
                         </EasyButton>
                         <EasyButton
                             medium
