@@ -6,6 +6,8 @@ import {
   Button,
   StyleSheet,
   TextInput,
+  Image,
+  Alert
 } from "react-native";
 import { Container } from "native-base";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -66,65 +68,78 @@ const UserProfile = (props) => {
     }, [context.stateUser.isAuthenticated])
   );
 
+  const handleDeleteProfile = async () => {
+    try {
+      const res = await axios.delete(`${baseURL}users/${context.stateUser.user.userId}`);
+      console.log("Profile deleted successfully");
+      AsyncStorage.removeItem("jwt");
+      logoutUser(context.dispatch);
+    } catch (error) {
+      console.error("Error deleting profile:", error);
+      // Handle error appropriately, such as displaying an error message to the user
+    }
+  };
+
   return (
     <Container style={styles.container}>
-      <ScrollView contentContainerStyle={styles.subContainer}>
-        {/* <TextInput
-                    style={styles.input}
-                    placeholder="Name"
-                    value={updatedName}
-                    onChangeText={text => setUpdatedName(text)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    value={updatedEmail}
-                    onChangeText={text => setUpdatedEmail(text)}
-                />
-                <Button title="Update Profile" onPress={handleUpdateProfile} /> */}
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.content}>
+          {userProfile && userProfile.image && (
+            <Image
+              source={{ uri: userProfile.image }}
+              style={styles.profileImage}
+            />
+          )}
+          <Text style={[styles.text, styles.header]}>
+            {userProfile ? userProfile.name : ""}
+          </Text>
+          <View style={{ marginTop: 20 }}>
+            <Text style={[styles.text, styles.subtitle]}>
+              Email: {userProfile ? userProfile.email : ""}
+            </Text>
+            <Text style={[styles.text, styles.subtitle]}>
+              Phone: {userProfile ? userProfile.phone : ""}
+            </Text>
+          </View>
 
-        <Text style={[styles.text, styles.header]}>
-          {userProfile ? userProfile.name : ""}
-        </Text>
-        <View style={{ marginTop: 20 }}>
-          <Text style={[styles.text, styles.subtitle]}>
-            Email: {userProfile ? userProfile.email : ""}
-          </Text>
-          <Text style={[styles.text, styles.subtitle]}>
-            Phone: {userProfile ? userProfile.phone : ""}
-          </Text>
-        </View>
-        
-        <View style={{ marginTop: 40 }}>
-          <Button
-            title={"Update Profile"}
-            onPress={() => [navigation.navigate("Update Profile")]}
-          />
-          <View style={{ marginTop: 80 }}>
-          <Button
-            title={"Sign Out"}
-            onPress={() => [
-              AsyncStorage.removeItem("jwt"),
-              logoutUser(context.dispatch),
-            ]}
-          />
-        </View>
-          <View style={styles.order}>
-            <Text style={[styles.text, styles.sectionTitle]}>My Orders</Text>
-            <View>
-              {orders ? (
-                orders.map((order) => {
-                  return (
-                    <OrderCard key={order.id} item={order} select="false" />
-                  );
-                })
-              ) : (
-                <View style={styles.order}>
-                  <Text style={[styles.text, styles.noOrders]}>
-                    You have no orders
-                  </Text>
-                </View>
-              )}
+          <View style={{ marginTop: 40 }}>
+            <Button
+              title={"Update Profile"}
+              onPress={() => [navigation.navigate("Update Profile")]}
+            />
+            <View style={{ marginTop: 20 }}>
+              <Button
+                title={"Delete Profile"}
+                onPress={handleDeleteProfile}
+                color="red"
+              />
+            </View>
+            <View style={{ marginTop: 80 }}>
+              <Button
+                title={"Sign Out"}
+                onPress={() => [
+                  AsyncStorage.removeItem("jwt"),
+                  logoutUser(context.dispatch),
+                ]}
+              />
+            </View>
+            <View style={styles.order}>
+              <Text style={[styles.text, styles.sectionTitle]}>My Orders</Text>
+              <View>
+                {orders ? (
+                  orders.map((order) => {
+                    return (
+                      <OrderCard key={order.id} item={order} select="false" />
+                    );
+                  })
+                ) : (
+                  <View style={styles.order}>
+                    <Text style={[styles.text, styles.noOrders]}>
+                      You have no orders
+                    </Text>
+                  </View>
+                )}
+              </View>
             </View>
           </View>
         </View>
@@ -136,30 +151,24 @@ const UserProfile = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: "center",
-    // paddingVertical: 40,
     backgroundColor: "#203354",
-    //width: '90%'
   },
-  subContainer: {
+  scrollView: {
+    flex: 1,
+  },
+  content: {
     alignItems: "center",
     marginTop: 60,
     marginRight: 30,
     marginLeft: 30,
+    paddingBottom: 20, // Added paddingBottom to prevent content cutoff
   },
-  order: {
-    marginTop: 20,
-    alignItems: "center",
-    marginBottom: 60,
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
+  profileImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
     marginBottom: 20,
-    width: "80%",
-    paddingHorizontal: 10,
   },
   text: {
     textAlign: "center",
@@ -174,6 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5,
   },
+  
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",

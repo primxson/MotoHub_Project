@@ -6,10 +6,14 @@ function authJwt() {
     return jwt({
         secret,
         algorithms: ['HS256'],
-        // isRevoked: isRevoked
+        //isRevoked: isRevoked
     })
         .unless({
             path: [
+                {
+                    url: /\/api\/v1\/users(.*)/,
+                    methods: ['DELETE']
+                },
                 {
                     url: /\/api\/v1\/products(.*)/,
                     methods: ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE']
