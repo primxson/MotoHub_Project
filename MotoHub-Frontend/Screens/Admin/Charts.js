@@ -53,52 +53,48 @@ const Charts = () => {
   // };
 
   const dataPie1 = products.reduce((acc, product) => {
-    const categoryIndex = acc.findIndex((item) => item.name === product.category.name);
+    const categoryIndex = acc.findIndex(
+      (item) => item.name === product.category.name
+    );
     if (categoryIndex === -1) {
-        acc.push({ name: product.category.name, count: 1, color: getRandomColor(), legendFontColor: "#7F7F7F", legendFontSize: 15 });
+      acc.push({
+        name: product.category.name,
+        count: 1,
+        color: getRandomColor(),
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15,
+      });
     } else {
-        acc[categoryIndex].count++;
+      acc[categoryIndex].count++;
     }
     return acc;
   }, []);
 
-  // const dataPie2 = [
-  //   {
-  //     name: "Seoul",
-  //     population: 21500000,
-  //     color: "rgba(131, 167, 234, 1)",
-  //     legendFontColor: "#7F7F7F",
-  //     legendFontSize: 15,
-  //   },
-  //   {
-  //     name: "Toronto",
-  //     population: 2800000,
-  //     color: "#F00",
-  //     legendFontColor: "#7F7F7F",
-  //     legendFontSize: 15,
-  //   },
-  //   {
-  //     name: "Beijing",
-  //     population: 527612,
-  //     color: "red",
-  //     legendFontColor: "#7F7F7F",
-  //     legendFontSize: 15,
-  //   },
-  //   {
-  //     name: "New York",
-  //     population: 8538000,
-  //     color: "#ffffff",
-  //     legendFontColor: "#7F7F7F",
-  //     legendFontSize: 15,
-  //   },
-  //   {
-  //     name: "Moscow",
-  //     population: 11920000,
-  //     color: "rgb(0, 0, 255)",
-  //     legendFontColor: "#7F7F7F",
-  //     legendFontSize: 15,
-  //   },
-  // ];
+  const dataPie2 = products.reduce((acc, product) => {
+    const productName = product.name;
+    const StockIndex = acc.findIndex(
+      (item) => item.name === productName
+    );
+    if (StockIndex === -1) {
+      acc.push({
+        name: productName,
+        total: product.countInStock,
+        withStocks: product.countInStock > 0 ? 1 : 0,
+        withoutStocks: product.countInStock === 0 ? 1 : 0,
+        color: getRandomColor(),
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15,
+      });
+    } else {
+      acc[StockIndex].total++;
+      if (product.countInStock > 0) {
+        acc[StockIndex].withStocks++;
+      } else {
+        acc[StockIndex].withoutStocks++;
+      }
+    }
+    return acc;
+  }, []);
 
   return (
     // <View>
@@ -128,22 +124,30 @@ const Charts = () => {
         />
       </View>
 
-      {/* <View style={[styles.center]}>
+      <View style={[styles.center]}>
         <Text style={[styles.title]}>Products Stocks</Text>
         <PieChart
           data={dataPie2}
           width={screenWidth}
           height={220}
           chartConfig={chartConfig}
-          accessor={"population"}
-          backgroundColor={"transparent"}
-          paddingLeft={"15"}
+          accessor="total"
+          backgroundColor="transparent"
+          paddingLeft="15"
           center={[10, 50]}
           absolute
+          // Display additional information in the tooltip
+          tooltipTextRenderer={({ value, name }) =>
+            `${name}: ${value} (${
+              dataPie2.find((item) => item.name === name).withStocks
+            } with stocks, ${
+              dataPie2.find((item) => item.name === name).withoutStocks
+            } without stocks)`
+          }
         />
       </View>
 
-      <View style={[styles.center]}>
+      {/* <View style={[styles.center]}>
         <Text style={[styles.title]}>Pending</Text>
         <ProgressChart
           data={dataProgress}
