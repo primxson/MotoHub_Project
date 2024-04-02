@@ -1,25 +1,28 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const categorySchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    icon: {
-        type: String,
-    },
-    color: { 
-        type: String,
-    }
-})
-
-
-categorySchema.virtual('id').get(function () {
-    return this._id.toHexString();
+  name: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    default: "",
+  },
+  icon: {
+    type: String,
+  },
+  color: {
+    type: String,
+  },
 });
 
-categorySchema.set('toJSON', {
-    virtuals: true,
+categorySchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+categorySchema.set("toJSON", {
+  virtuals: true,
 });
 // categorySchema.method('toJSON', function(){
 //     const { __v, ...object } = this.toObject();
@@ -27,7 +30,7 @@ categorySchema.set('toJSON', {
 //     return { ...result, id };
 // });
 
-exports.Category = mongoose.model('Category', categorySchema);
+exports.Category = mongoose.model("Category", categorySchema);
 // {
 //     "name": "Electronics",
 //     "icon": "category.jpg",
