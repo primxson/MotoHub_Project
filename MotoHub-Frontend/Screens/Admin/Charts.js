@@ -114,7 +114,7 @@ const Charts = () => {
         <PieChart
           data={dataPie1}
           width={screenWidth}
-          height={220}
+          height={250}
           chartConfig={chartConfig}
           accessor={"count"}
           backgroundColor={"transparent"}
@@ -129,7 +129,7 @@ const Charts = () => {
         <PieChart
           data={dataPie2}
           width={screenWidth}
-          height={220}
+          height={250}
           chartConfig={chartConfig}
           accessor="total"
           backgroundColor="transparent"

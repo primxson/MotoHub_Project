@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Text, View, Button, SafeAreaView } from 'react-native'
+import { Text, View, Button, SafeAreaView, Alert } from 'react-native'
 import { Select, Item, Picker, Toast } from 'native-base'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import FormContainer from '../../../Shared/Form/FormContainer'
@@ -46,21 +46,25 @@ const Checkout = (props) => {
     }, [])
 
     const checkOut = () => {
-        console.log("orders", orderItems)
-        let order = {
-            city,
-            country,
-            dateOrdered: Date.now(),
-            orderItems,
-            phone,
-            shippingAddress1: address,
-            shippingAddress2: address2,
-            status: "3",
-            user,
-            zip,
+        if (phone === "" || address === "" || address2 === "" || city === "" || zip === "") {
+            Alert.alert("Validation Error", "Please fill in all required fields.");
+        } else {
+            console.log("orders", orderItems)
+            let order = {
+                city,
+                country,
+                dateOrdered: Date.now(),
+                orderItems,
+                phone,
+                shippingAddress1: address,
+                shippingAddress2: address2,
+                status: "3",
+                user,
+                zip,
+            }
+            console.log("ship", order)
+            navigation.navigate("Payment", { order: order })
         }
-        console.log("ship", order)
-        navigation.navigate("Payment", { order: order })
     }
     console.log(orderItems)
     return (

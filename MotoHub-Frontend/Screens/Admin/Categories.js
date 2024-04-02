@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import EasyButton from "../../Shared/StyledComponents/EasyButton";
 import baseURL from "../../assets/common/baseurl";
@@ -70,35 +71,43 @@ const Categories = () => {
   }, []);
 
   const addCategory = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    };
+    if (!categoryName.trim() && !categoryImage) {
+      Alert.alert("Error", "Category name and image are empty.");
+    } else if (!categoryName.trim()) {
+      Alert.alert("Error", "Category name is empty.");
+    } else if (!categoryImage) {
+      Alert.alert("Error", "Category image is empty.");
+    } else {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      };
 
-    const formData = new FormData();
-    formData.append("name", categoryName);
+      const formData = new FormData();
+      formData.append("name", categoryName);
 
-    if (categoryImage) {
-      formData.append("image", {
-        uri: categoryImage.uri,
-        type: "image/jpeg",
-        name: `category_${Date.now()}.jpg`,
-      });
-    }
+      if (categoryImage) {
+        formData.append("image", {
+          uri: categoryImage.uri,
+          type: "image/jpeg",
+          name: `category_${Date.now()}.jpg`,
+        });
+      }
 
-    try {
-      const response = await axios.post(
-        `${baseURL}categories`,
-        formData,
-        config
-      );
-      console.log(response.data);
-      setCategoryName("");
-      setCategoryImage(null);
-    } catch (error) {
-      console.error("Error adding category:", error);
+      try {
+        const response = await axios.post(
+          `${baseURL}categories`,
+          formData,
+          config
+        );
+        console.log(response.data);
+        setCategoryName("");
+        setCategoryImage(null);
+      } catch (error) {
+        console.error("Error adding category:", error);
+      }
     }
   };
 

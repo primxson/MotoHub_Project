@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Button, Pressable, FlatList, TouchableOpacity, Dimensions, } from 'react-native'
+import { View, Button, Pressable, FlatList, TouchableOpacity, Dimensions, Alert } from 'react-native'
 import {
     Container,
     Text,
@@ -41,38 +41,44 @@ const Payment = ({ route }) => {
     const [card, setCard] = useState('');
     console.log(order)
     const navigation = useNavigation()
+
+    const checkOut = () => {
+        if (!selected) {
+            Alert.alert("Validation Error", "Please select a payment method.");
+        } else {
+            navigation.navigate("Confirm", { order: order });
+        }
+    }
+
     return (
-        <Center  >
+        <Center>
             <Heading>
                 <Text>Choose your payment method</Text>
             </Heading>
 
-            <HStack bg="red.200" width="100%"  >
+            <HStack bg="red.200" width="100%">
                 <Radio.Group
                     name="myRadioGroup"
                     value={selected}
                     onChange={(value) => {
                         setSelected(value);
                     }}
-
                 >
-                    {console.log(selected)}
                     {methods.map((item, index) => {
                         return (
                             <Radio
                                 key={index}
-                                value={item.value} my="1"
+                                value={item.value}
+                                my="1"
                                 colorScheme="green"
                                 size="22"
                                 style={{ float: 'right' }}
                                 icon={<CheckCircleIcon size="22" mt="0.5" color="emerald.500" />}
-
                             >
                                 {item.name}
                             </Radio>
                         )
-                    })
-                    }
+                    })}
                 </Radio.Group>
             </HStack>
             {selected === 3 ? (
@@ -87,7 +93,6 @@ const Payment = ({ route }) => {
                             endIcon: <CheckIcon size="5" />
                         }}
                     >
-                        {console.log(card)}
                         {paymentCards.map((c, index) => {
                             return (
                                 <Select.Item
@@ -96,14 +101,13 @@ const Payment = ({ route }) => {
                                     value={c.name} />
                             )
                         })}
-
                     </Select>
                 </Box>
             ) : null}
             <View style={{ marginTop: 60, alignSelf: 'center' }}>
                 <Button
                     title={"Confirm"}
-                    onPress={() => navigation.navigate("Confirm", { order: order })} />
+                    onPress={checkOut} />
             </View>
         </Center>
     )

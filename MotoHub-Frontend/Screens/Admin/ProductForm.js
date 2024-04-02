@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
     View,
     Text,
@@ -6,44 +6,41 @@ import {
     StyleSheet,
     TouchableOpacity,
     Platform
-} from "react-native"
-import { Item, Picker, Select, Box } from "native-base"
-import FormContainer from "../../Shared/Form/FormContainer"
-import Input from "../../Shared/Form/Input"
-import EasyButton from "../../Shared/StyledComponents/EasyButton"
-
-import Icon from "react-native-vector-icons/FontAwesome"
-import Toast from "react-native-toast-message"
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import baseURL from "../../assets/common/baseurl"
-import Error from "../../Shared/Error"
-import axios from "axios"
-import * as ImagePicker from "expo-image-picker"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+} from "react-native";
+import { Item, Picker, Select, Box } from "native-base";
+import FormContainer from "../../Shared/Form/FormContainer";
+import Input from "../../Shared/Form/Input";
+import EasyButton from "../../Shared/StyledComponents/EasyButton";
+import Icon from "react-native-vector-icons/FontAwesome";
+import Toast from "react-native-toast-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import baseURL from "../../assets/common/baseurl";
+import Error from "../../Shared/Error";
+import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import mime from "mime";
 
-
 const ProductForm = (props) => {
-    // console.log(props.route.params)
     const [pickerValue, setPickerValue] = useState('');
     const [brand, setBrand] = useState('');
     const [name, setName] = useState('');
-    const [price, setPrice] = useState(0);
+    const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
-    const [mainImage, setMainImage] = useState();
+    const [mainImage, setMainImage] = useState('');
     const [category, setCategory] = useState('');
     const [categories, setCategories] = useState([]);
-    const [token, setToken] = useState();
-    const [error, setError] = useState();
-    const [countInStock, setCountInStock] = useState();
+    const [token, setToken] = useState('');
+    const [error, setError] = useState('');
+    const [countInStock, setCountInStock] = useState('');
     const [rating, setRating] = useState(0);
     const [isFeatured, setIsFeatured] = useState(false);
-    const [richDescription, setRichDescription] = useState();
+    const [richDescription, setRichDescription] = useState('');
     const [numReviews, setNumReviews] = useState(0);
     const [item, setItem] = useState(null);
 
-    let navigation = useNavigation()
+    let navigation = useNavigation();
 
     useEffect(() => {
         if (!props.route.params) {
@@ -62,27 +59,27 @@ const ProductForm = (props) => {
         }
         AsyncStorage.getItem("jwt")
             .then((res) => {
-                setToken(res)
+                setToken(res);
             })
-            .catch((error) => console.log(error))
+            .catch((error) => console.log(error));
         axios
             .get(`${baseURL}categories`)
             .then((res) => setCategories(res.data))
-            .catch((error) => alert("Error  load categories"));
+            .catch((error) => alert("Error loading categories"));
         (async () => {
             if (Platform.OS !== "web") {
                 const {
                     status,
                 } = await ImagePicker.requestCameraPermissionsAsync();
                 if (status !== "granted") {
-                    alert("Sorry, we need camera roll permissions to make this work!")
+                    alert("Sorry, we need camera roll permissions to make this work!");
                 }
             }
         })();
         return () => {
-            setCategories([])
-        }
-    }, [])
+            setCategories([]);
+        };
+    }, []);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -92,24 +89,50 @@ const ProductForm = (props) => {
             quality: 1
         });
 
-        if (!result.canceled) {
-            console.log(result)
+        if (!result.cancelled) {
+            console.log(result);
             setMainImage(result.assets[0].uri);
             setImage(result.assets[0].uri);
         }
-    }
-    
+    };
 
     const addProduct = () => {
+        if (name === "") {
+            setError("Product name is empty");
+            return;
+        }
+
+        if (brand === "") {
+            setError("Product brand is empty");
+            return;
+        }
+
+        if (price === "") {
+            setError("Product price is empty");
+            return;
+        }
+
+        if (isNaN(parseFloat(price))) {
+            setError("Price must be a valid number");
+            return;
+        }
+
+        if (countInStock === "") {
+            setError("Product count in stock is empty");
+            return;
+        }
+
+        if (isNaN(parseInt(countInStock))) {
+            setError("Count in stock must be a valid number");
+            return;
+        }
+
         if (
-            name === "" ||
-            brand === "" ||
-            price === "" ||
             description === "" ||
-            category === "" ||
-            countInStock === ""
+            category === ""
         ) {
-            setError("Please fill in the form correctly")
+            setError("Please fill in the form correctly");
+            return;
         }
 
         let formData = new FormData();
@@ -136,9 +159,9 @@ const ProductForm = (props) => {
                 "Content-Type": "multipart/form-data",
                 "Authorization": `Bearer ${token}`
             }
-        }
+        };
+
         if (item !== null) {
-            console.log(item)
             axios
                 .put(`${baseURL}products/${item.id}`, formData, config)
                 .then((res) => {
@@ -146,12 +169,12 @@ const ProductForm = (props) => {
                         Toast.show({
                             topOffset: 60,
                             type: "success",
-                            text1: "Product successfuly updated",
+                            text1: "Product successfully updated",
                             text2: ""
                         });
                         setTimeout(() => {
                             navigation.navigate("Products");
-                        }, 500)
+                        }, 500);
                     }
                 })
                 .catch((error) => {
@@ -160,8 +183,8 @@ const ProductForm = (props) => {
                         type: "error",
                         text1: "Something went wrong",
                         text2: "Please try again"
-                    })
-                })
+                    });
+                });
         } else {
             axios
                 .post(`${baseURL}products`, formData, config)
@@ -175,24 +198,21 @@ const ProductForm = (props) => {
                         });
                         setTimeout(() => {
                             navigation.navigate("Products");
-                        }, 500)
+                        }, 500);
                     }
                 })
                 .catch((error) => {
-                    console.log(error)
+                    console.log(error);
                     Toast.show({
                         topOffset: 60,
                         type: "error",
                         text1: "Something went wrong",
                         text2: "Please try again"
-                    })
-                })
-
+                    });
+                });
         }
+    };
 
-    }
-
-    
     return (
         <FormContainer title="Add Product">
             <View style={styles.imageContainer}>
@@ -267,7 +287,7 @@ const ProductForm = (props) => {
                                 key={c.id}
                                 label={c.name}
                                 value={c.id} />
-                        )
+                        );
                     })}
 
                 </Select>
@@ -279,14 +299,14 @@ const ProductForm = (props) => {
                     large
                     primary
                     onPress={() => addProduct()}
-                ><Text style={styles.buttonText}>Confirm</Text>
+                >
+                    <Text style={styles.buttonText}>Confirm</Text>
                 </EasyButton>
             </View>
-            
-        </FormContainer>
-    )
-}
 
+        </FormContainer>
+    );
+};
 
 const styles = StyleSheet.create({
     label: {
@@ -327,7 +347,6 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         elevation: 20
     }
-})
-
+});
 
 export default ProductForm;
