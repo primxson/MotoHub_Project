@@ -8,6 +8,7 @@ import CartIcon from "../Shared/CartIcon";
 import CartNavigator from "./CartNavigator";
 import UserNavigator from "./UserNavigator";
 import AdminNavigator from "./AdminNavigator";
+import Charts from "../Screens/Admin/Charts"
 
 import AuthGlobal from "../Context/Store/AuthGlobal";
 

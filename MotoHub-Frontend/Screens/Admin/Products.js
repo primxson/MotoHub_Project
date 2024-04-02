@@ -142,6 +142,15 @@ const Products = (props) => {
                     <Icon name="plus" size={18} color="white" />
                     <Text style={styles.buttonText}>Categories</Text>
                 </EasyButton>
+                <EasyButton
+                    secondary
+                    medium
+                    onPress={() => navigation.navigate("Charts")}
+                >
+                    <Icon name="plus"  size={18} color="white" />
+                    <Text style={styles.buttonText}>Charts</Text>
+                </EasyButton>
+                
             </View>
             <Searchbar width="80%"
                 placeholder="Search"
